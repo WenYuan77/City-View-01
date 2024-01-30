@@ -1,0 +1,230 @@
+body {
+    margin: 0;
+    background-size: cover;
+    transition: all ease-in-out 0.3s;
+}
+/*习惯性先将margin设置为0。*/
+/*这里对body设置transition是为了让整个页面图片切换更加流畅，
+因为一旦切换图片指令一下达，电脑就会开始从后端提取新的图片数据，这样慢慢切换就可以等图片下载完了再完全切换过去。*/
+
+
+
+.carousel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all ease-in-out 0.3s;
+}
+/*这里的left: 50% 和 transform: translateX(-50%)， 以及position: absolute统统表示“左右居中”，记住这个用法，*/
+/*对比“上下居中”的'top: 50%；transform：translateY（-50%）;position: absolute'来记。都必须要先“absolute”，且
+都是50%和-50%，要不要relative视情况，如果是居中于整个页面（body）则不用relative。*/
+/*此处因为加入了gallery这个box，所以要注意，我们此处是要对整个carousel这个box进行调整，而不是仅仅对于其中的gallery（缩略图）部分，也包括nav（左右键）不分。*/
+
+/*padding会改变box的大小，但不会对box里的内容的大小有任何改变；而margin不会改变box大小，但是可能会改变里面内容的大小，如图片可能被压缩。*/
+/*padding是针对于box的“原始大小”而言的，是在原始大小的基础上加入空白的padding。box原始大小变化不会影响padding的变化，只会改变padding的位置，例如*/
+/*这里的.carousel这个box的“原始高度”是装图片的10个box的高度，那么如果10个box高度变化，会影响carousel这个box高度的变化，但是原先设置的padding依然存在，只是会改变位置。*/
+/*.carousel里的.carousel:hover 是必须的，因为这表示对于carousel这个box的所有的transition都进行设置。例如，这里的transition*/
+/*是下面的.carousel:hover 所设置的，但如果只把transition: all ease-in-out 0.3s 写在hover里，则渐变的效果只会在鼠标“hover（进入）图片” */
+/*时呈现，鼠标“离开”的时候则不会有渐变的效果，会显得很唐突，所以最好将transition用于整个box，这样就包括了“进和出”。下面hover里的transition: all ease-in-out 0.3s可以不要。*/
+
+.gallery {
+    display: flex;
+    flex-direction: row;
+}
+
+.gallery:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: all ease-in-out 0.3s;
+
+}
+
+
+
+.gallery div {
+    margin: 0 5px;
+    width: 130px;
+    height: 95px;
+    border-radius: 10px;
+    background-size: cover;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    transition: all ease-in-out 0.3s;
+    opacity: 0.8;
+    z-index: 2;
+}
+
+
+
+.gallery div:hover {
+    transform: scale(1.2) translateY(-20px);
+    opacity: 1;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+    z-index: 3;
+}
+/*!*这里是单独对hover到每个div（每个图片上）时进行设置，因为我们已经对div的母box进行了hover设置，所以，如果对div的hover没有单独的要求，*!*/
+/*!*那么div在鼠标hover的时候会沿用其母box的hover设置，如果有单独要求，则需要单独像上面这样写出来。*!*/
+/*!*scale(1.2)表示hover的时候变大为1.2倍。*!*/
+/*!*translateY（-20px）表示hover时，该div“向上弹起20px的距离”，负数表示向上，正数表示向下。*!*/
+
+/*!*z-index： 3 表示让被鼠标hover的这个div，也就是这张图片，可以“优先于”其它图片显示，即，如果有需要，该图片（该div）可以“覆盖”其他图片（div），*/
+/*因为我们设置了让被hover的图片被放大到1.2倍，如果不设置index，可能该图片多余的部分会被其它图片挡住。//*/
+/*z-index表示“显示优先级”，级别越高，越优先显示。但“可能”只能用于position非static的box，如被absolute或者relative的，还不确定*/
+
+
+.nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) translateX(-15px);
+    z-index: 0;
+    /*如果利用这种方法居中，则该box会被居中到其母box中，即使它已经absolute或者relative了，比较奇怪。之后，还可以用translateX等方法做微调，translateX(-15px)表示向左移动15px。*/
+
+    /*结合上面 “.gallery div” 的内容，要注意：如果某个box（如下面的.btnNav）的母box（如.nav）的z-index的值（如这里的0）小于另一个box的z-index值，*/
+    /*那么无论该box里的子box的z-index值有多高，其子box都不能优先显示于那个z-index值比其母box的那个box，如：因为这里.nav这个box的z-index是0，低于.gallery div 的“2”，*/
+    /*所以，无论其子box（.btnNav）的z-index值多高，.btnNav都不能显示在.gallery div 之上。*/
+}
+
+.btnNav {
+    background-color: rgba(81, 81, 84, 0.4);
+    color: rgba(134, 134, 139, 0.9);
+    font-weight: 600;
+    font-size: 25px;
+    outline: none;
+    border: none;
+    transition: all ease 0.3s;
+    width: 50px;
+    height: 50px;
+    /*z-index: 9999;(无效,参考92行解释)*/
+
+}
+
+.btnNav:hover {
+    cursor: pointer;
+    background-color: rgba(201, 210, 215, 0.7);
+    transition: all ease 0.3s;
+}
+
+
+
+.imgContainer {
+    width: 150px;
+    height: 70px;
+}
+
+.selected {
+    border: 4px solid rgba(255, 255, 255, 0.7) !important;
+}
+/*因为这里的border设置被其它的border设置覆盖了，为了保证显示，所以用!important给与这条代码优先权。*/
+
+.searchBar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20%;
+    display: flex;
+}
+/*!*注意，input的文本框和button都是有“固定大小”的，如果一个box里只有这两个元素，那么这个box的大小就仅仅是这两个元素的大小，所以*!*/
+/*这里searchBar这个box的大小就是input和button放在一起的大小。*!*/
+/*还需要注意，input和button虽然是box，但是它们并不会“自动换行”，所以这里它们一开始就是横向排列的。*/
+/*这里的left和transform是用于左右居中，而top是用来上下的高度。*/
+
+#inputCity {
+    border: none;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0/ 0.05);
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.6);
+    opacity: 0.6;
+    transition: all ease-in-out 0.3s;
+    color:black;
+    outline: 1px solid grey;
+}
+
+/*!*input的box有一个自带的背景色，就是白色。*!*/
+/*!*input的输入框中“用户输入的内容”也属于input里的“文本”，所以也可以通过font-size等来对“用户输入”的文本进行调整。*/
+/*font-size等文本调整指令并不只限于我们预先设置的文本内容，也可以用于随机的”用户端“产生的文本内容。*!/*/
+
+#inputCity:focus {
+    outline: 1px solid #dc0d2d;
+    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 /0.05);
+    transition: all ease-in-out 0.3s;
+}
+/*focus是针对于input而用的，表示“在输入框中准备输入数据以及正在输入数据的时候”，执行某些操作。
+即，鼠标点击输入框（出现闪烁的“提示输入指令”）后，以及用户正在输入指令的时候,执行某些操作。一样可以通过transition加入渐变效果。*/
+/*rgb(0 0 0 /0.05)是rgb(0, 0, 0, 0.05)的另一种写法，不需要用逗号分隔。*/
+
+#inputCity:hover {
+    opacity: 1;
+    outline: 1px solid #dc0d2d;
+    transition: all ease-in-out 0.3s;
+}
+
+#inputSearch {
+    border: none;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0/ 0.05);
+    padding: 10px;
+    margin: 0 10px;
+    font-size: 14px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.6);
+    opacity: 0.6;
+    transition: all ease-in-out 0.3s;
+    color:black;
+    outline: 1px solid grey;
+}
+/*这里的两个能见度可以只用最后一个opacity来设置，因为最后这个opacity代表了整个box，会更加全面，也会作用到border、outline等等。*/
+/*注意，margin不光只能对“母box”生效，也会对被加了margin的这个box“四周的”“同级别box”生效。例如，这里的inputSearch*/
+/*和inputCity是挨着的，所以，如果对inputSearch设置margin:0 10px，那么也会导致inputSearch相较于inputCity向右移动10px，*/
+/*因为margin表示“保持距离”，只要能保持，怎么样都可以，不光用于针对于母box。*/
+/*border-raiuds也可以是百分比，50%即调成“椭圆形”，视情况调节即可。*/
+
+/*                                                         另外，因为inputSearch的母box，即btnBar的大小是根据inputSearch和inputCity两个子box的大小来决定的，在这种情况下，母box*/
+/*是“不会压缩”子box的大小的，所以，即使这里的margin:0 10看似好像会导致inputSearch右边被压缩，但其实不会，因为其母boxbtnBar会自“自动延伸宽度”，以“不压缩”其里面的内容。但这只限于*/
+/*“母box的大小决定于其里面的内容（如子box、图片）”这一种条件下。*/
+
+#inputSearch:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    transform: scale(1.2);
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 0.5;
+        transform:translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/*@keyframes是加动画的指令，fadeIn是我们自动以的动画名字，像function的名字一样，后面同样跟大括号{}。*/
+/*                                                                                             */
+/*0%、50%、100%表示时间线，可以自有设置。*/
+
+/*意思是：*/
+/*       时间走到一半的时候（0~50%），什么也不呈现（opacity为0，和js里面的delay设置是一个意思；*/
+/*       时间走到一半时，能见度为50%，并且让内容（图片）往上跳20px（跳了之后其实会马上恢复原样）；*/
+/*       时间结束，我们希望图片完全呈现。   */
+/*                                 */
+/*动画需要指定对象，这里我们指定js里面的177和178行。*/
+
+/*最后一点，设置动画这种行为，是很少见的会“直接将js和css”联系起来的行为，像这里，我们直接通过fadeIn调取了css里的动画的内容，这是很少见的。*/

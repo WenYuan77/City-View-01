@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CityView Project</title>
+    <link rel="stylesheet" href="cityView_project.css">
+    <script src="cityView_project.js" defer></script>
+</head>
+<body>
+<div class="searchBar">
+    <input id="inputCity" type="text" placeholder="Input city name...">
+    <button id="inputSearch">search</button>
+</div>
+<div class="carousel">
+    <div class="gallery"></div>
+<!--    之前生成的缩略图都是直接放在carousel里的，现在改为放在子集gallery里，
+这样我们从gallery清空图片时，就不会影响carousel里的其他内容，如以下的nav。参考js的82行。-->
+<!--同样的，因为我们加了入了gallery部分，所以在css中需要调整carousel时，不能够只选择gallery当selector，要搞清楚css中每一项的意义。-->
+    <div class="nav">
+        <button class="btnNav prev"><</button>
+        <button class="btnNav next">></button>
+<!--        做这种箭头的都可以这样把箭头放在一个nav的box里。-->
+<!--        这里的两个button都分别给了两个className， 一个是btnNav，一个是prev/next。-->
+    </div>
+</div>
+</body>
+</html>
